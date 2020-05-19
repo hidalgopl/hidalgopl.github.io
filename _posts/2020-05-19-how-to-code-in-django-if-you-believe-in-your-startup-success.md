@@ -5,8 +5,7 @@ date:   2020-05-19 16:12:11 +0200
 author: "Paweł Bojanowski"
 categories: django drf architecture startups hexagonal
 ---
-# How to write DRF code if you believe in your startup success
-
+## Startup 
 In a fast-paced, digital world we all live in, time to market is often defined as one of the key factors for success. If you are creating a startup, you probably heard about Minimal Viable Product, most likely some smart people told you also to avoid premature optimization. Just focus on delivering value, right? Don’t solve problems you don’t have yet. Pick a tool, language or framework which we’ll help you to be productive quickly. Don’t reinvent the wheel. Build from open-source, ready, building blocks.
 
 I have to say, popular backend frameworks, such as Django or Rails are often great tool to build sophisticated systems pretty quickly.
@@ -16,14 +15,16 @@ Ooops. We’ve got a problem now. We took a lot of shortcuts and now is time to 
 
 As a co-founder or CTO, you need to take immediate action to solve this problem. You can hire more developers and start splitting your code into microservices, which would very likely be a huge effort and would stop developing new features for a while. If you weren’t very disciplined at the beginning, probably your monotlith app isn’t really ready for split. Looks like there are two ways which you can take now: You can try split it as it is, which would be a maintenance hell, or just trying to rewrite some parts from scratch, which can cause series of bugs if you didn’t invest in some end-to-end or integration tests at the beginning.
 
+## Common sins
+
 If you are in similar situation right now and your weapon of choice was Django, I can imagine you may have issues like:
-1. Huge models with a lot of business logic inside (VERY BAD, although a lot of books were promoting “Fat models” as best practice not so long ago)
-2. Huge serializers with business logic inside.
-3. Gigantic viewsets, also with business logic inside
-4. Business logic separated, but relaying on django features (such as models, serializers, signals, etc.)
-5. No unit tests at all
-6. No tests at all
-7. Integration tests only, which require spinning test database, test server and going through all layers of app (view, serialization, model) and mocking like crazy, just to test business logic.
+ - Huge models with a lot of business logic inside (VERY BAD, although a lot of books were promoting “Fat models” as best practice not so long ago)
+ - Huge serializers with business logic inside.
+ - Gigantic viewsets, also with business logic inside
+ - Business logic separated, but relaying on django features (such as models, serializers, signals, etc.)
+ - No unit tests at all
+ - No tests at all
+ - Integration tests only, which require spinning test database, test server and going through all layers of app (view, serialization, model) and mocking like crazy, just to test business logic.
 
 If any of those sounds familiar, keep reading.
 
@@ -31,7 +32,8 @@ Those are common sins I encountered in django apps during my career. All those a
 
 But hey! We can do better than this since very beginning, without investing much extra time. In this post, I’ ll show you few basic techniques how to do this. We will use well known Object oriented programming techniques, which is Hexagonal architecture, a.k.a ports-adapters architecture. 
 
-Let’s focus on real world example (little bit simplified for sake of readability).
+## Let’s focus on real world example 
+(little bit simplified for sake of readability).
 
 Imagine you are developing assets portfolio app. User can have different types of assets, such as stock shares, gold/silver coins or just foreign currencies. Your app role is to tell him how much are those worth now.
 Let’s say user can set his assets manually and we will persist amounts of different types of assets in database. You want to add an endpoint, which would return current value of his assets. To make him happy, we also need to show how much he gained from investment. To get up-to-date currencies rates, we will need to call 3rd party API. We’ll use this API to get rates from the day when he invested a money, just to compare those and show a difference (hopefully, they are worth now more than 100%).
@@ -179,7 +181,7 @@ class RatesDTO:
 
 Wait, but this may feel weird. We had almost the same data structure in django model, right? Why then we write it over again? Bear with me, and I hope you’ll have “aha” moment soon.
 
-Those two dataclasses serve two purposes: PortofolioDTO will let us abstract data source of user's assets (as it may change) and RatesDTO abstracts source of currency exchange rates.
+Those two dataclasses serve two purposes: PortfolioDTO will let us abstract data source of user's assets (as it may change) and RatesDTO abstracts source of currency exchange rates.
 That's useful, because we may need to switch to different underlying database, ORM or framework as well as we can use different API to fetch currency rates.
 And I can tell you with 100% certainty that we want to use different data sources in our tests.
 
@@ -188,8 +190,10 @@ Now, let's wrap our currency API client into helper class, which will implement 
 `myapp.clients.py`
 ```python
 from abc import ABC, abstractmethod
-from dtos import RatesDTO
+
 import requests
+
+from myapp.dtos import RatesDTO
 
 
 class HttpClientAdapter(ABC):
@@ -234,8 +238,8 @@ Now we need adapter that will translate django model instance into our `Portfoli
 It's really simple one.
 `myapp.adapters.py`
 ```python
-from my_app.models import Portfolio
 from my_app.dtos import PortfolioDTO
+from my_app.models import Portfolio
 
 
 def portfolio_django_adapter(portfolio_obj: Portfolio) -> PortfolioDTO:
@@ -249,7 +253,7 @@ Finally, we’re getting to business logic handler class, which will connect all
 
 `myapp.dtos.py`
 ```python
-from dtos import PortfolioDTO, RatesDTO
+from myapp.dtos import PortfolioDTO, RatesDTO
 
 
 class PortfolioHandler:
@@ -277,7 +281,7 @@ from myapp.handlers import PortfolioHandler
 from myapp.models import Portfolio
 
 
-class PorfolioView(GenericAPIView):
+class PortfolioView(GenericAPIView):
     def get(self, request, *args, **kwargs):
         portfolio = self.get_obj_or_404(Portfolio, user=request.user)
         starting_value = portfolio.calculate_starting_value()
@@ -302,6 +306,7 @@ Well, short answer is, for this:
 `tests.py`
 ```python
 import pytest
+
 from myapp.dtos import PortfolioDTO, RatesDTO
 from myapp.handler import PortfolioHandler
 
