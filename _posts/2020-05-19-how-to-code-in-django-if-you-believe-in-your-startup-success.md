@@ -1,5 +1,11 @@
+---
+layout: post
+title:  "How to write DRF code if you believe in your startup success"
+date:   2020-05-19 16:12:11 +0200
+author: "Paweł Bojanowski"
+categories: django drf architecture startups hexagonal
+---
 # How to write DRF code if you believe in your startup success
-
 
 In a fast-paced, digital world we all live in, time to market is often defined as one of the key factors for success. If you are creating a startup, you probably heard about Minimal Viable Product, most likely some smart people told you also to avoid premature optimization. Just focus on delivering value, right? Don’t solve problems you don’t have yet. Pick a tool, language or framework which we’ll help you to be productive quickly. Don’t reinvent the wheel. Build from open-source, ready, building blocks.
 
