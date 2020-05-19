@@ -213,7 +213,7 @@ class CurrencyRatesClient:
         self.currencies = "EUR,CHF"
         self.base_currency = "USD"
         self.client = http_client()
-        self.base_url = ""
+        self.base_url = "https://currenciesapi.com/"
 
     def _build_url(self):
         return f"{self.base_url}?={self.currencies}&base={self.base_currency}"
@@ -222,7 +222,8 @@ class CurrencyRatesClient:
         url = self._build_url()
         resp = self.client.get(
             url
-        )  # normally you want to add try/except error handling here – I’m not doing it for sake of simplicity of this example
+        )  # normally you want to add try/except error handling here – 
+        # I’m not doing it for sake of simplicity of this example
         body = resp.json()
         return RatesDTO(eur_rate=body["EUR"], chf_rate=body["CHF"])
 
