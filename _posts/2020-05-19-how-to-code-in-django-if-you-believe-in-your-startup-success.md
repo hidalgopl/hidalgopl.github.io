@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "How to write DRF code if you believe in your startup success"
+title:  "Coding in Django Rest Framework if you believe in your startup success"
 date:   2020-05-19 16:12:11 +0200
 author: "Paweł Bojanowski"
 categories: django drf architecture startups hexagonal
