@@ -78,26 +78,31 @@ class Portfolio(models.Model):
     eur_amount = models.FloatField()
     chf_rate = models.FloatField()
     eur_rate = models.FloatField()
-    
+
     def save(self, *args, **kwargs):
         self.super()
         if self.pk is None:  # this will be True only if portfolio is getting created
-            resp = requests.get("https://currenciesapi.com/rates?=CHF,EUR&base=USD")  # this is fake url
+            resp = requests.get(
+                "https://currenciesapi.com/rates?=CHF,EUR&base=USD"
+            )  # this is fake url
             self.chf_rate = resp.json()["CHF"]
             self.eur_rate = resp.json()["EUR"]
         return self
-   
+
     def calculate_starting_value(self):
         return self.eur_rate * self.eur_amount + self.chf_rate * self.chf_amount
 
     def calculate_current_value(self):
         # if you’re a bit smarter, you probably use cached_property decorator on this function
         # I’m not doing it here, because whole idea about keeping it in model is WRONG.
-        resp = requests.get("https://currenciesapi.com/rates?=CHF,EUR&base=USD")  # this is fake url
+        resp = requests.get(
+            "https://currenciesapi.com/rates?=CHF,EUR&base=USD"
+        )  # this is fake url
         body = resp.json()
         current_eur_rate = body["EUR"]
         current_chf_rate = body["CHF"]
         return current_eur_rate * self.eur_amount + current_chf_rate * self.chf_amount
+
 ```
 
 
@@ -139,7 +144,7 @@ from myapp.models import Portfolio
 from myapp.serializers import PortfolioSerializer
 
 
-class PorfolioView(RetrieveModelMixin):
+class PortfolioView(RetrieveModelMixin):
     serializer_class = PortfolioSerializer
     queryset = Portfolio.objects.all()
 ```
@@ -186,15 +191,18 @@ from abc import ABC, abstractmethod
 from dtos import RatesDTO
 import requests
 
+
 class HttpClientAdapter(ABC):
     @abstractmethod
     def get(self, url: str) -> dict:
-         pass
+        pass
+
 
 class RatesClient(ABC):
     @abstractmethod
     def get_current_rates(self) -> RatesDTO:
         pass
+
 
 class CurrencyRatesClient:
     def __init__(self, http_client=requests.Client):
@@ -202,18 +210,18 @@ class CurrencyRatesClient:
         self.base_currency = "USD"
         self.client = http_client()
         self.base_url = ""
-   
-   def build_url(self):
+
+    def _build_url(self):
         return f"{self.base_url}?={self.currencies}&base={self.base_currency}"
 
     def get_current_rates(self) -> RatesDTO:
         url = self._build_url()
-        resp = self.client.get(url)  # normally you want to add try/except error handling here – I’m not doing it for sake of simplicity of this example
+        resp = self.client.get(
+            url
+        )  # normally you want to add try/except error handling here – I’m not doing it for sake of simplicity of this example
         body = resp.json()
-        return RatesDTO(
-            eur_rate=body["EUR"],
-            chf_rate=body["CHF"]
-        )
+        return RatesDTO(eur_rate=body["EUR"], chf_rate=body["CHF"])
+
 ```
 Goal here is to avoid writing same code lines over and over, as well as make it easier to mock 3rd Party API requests in tests. In any time, I also want to have ability to change http client (now I’m using requests, but in the future – who knows?)
 So, we have nice clean Client class to get current rates. We can easily unit test it without need to send any http requests, because we pass http_client class as an argument in initialization. We can easily pass mocked class there, all it has to have is mocked `get(url: str) → dict` method.
@@ -231,7 +239,10 @@ from my_app.dtos import PortfolioDTO
 
 
 def portfolio_django_adapter(portfolio_obj: Portfolio) -> PortfolioDTO:
-    return PortfolioDTO(eur_amount=portfolio_obj.eur_amount, chf_amount=portfolio_obj.chf_amount)
+    return PortfolioDTO(
+        eur_amount=portfolio_obj.eur_amount, chf_amount=portfolio_obj.chf_amount
+    )
+
 ```
 
 Finally, we’re getting to business logic handler class, which will connect all of the puzzles.
@@ -240,13 +251,17 @@ Finally, we’re getting to business logic handler class, which will connect all
 ```python
 from dtos import PortfolioDTO, RatesDTO
 
+
 class PortfolioHandler:
     def __init__(self, rates: RatesDTO, portfolio: PortfolioDTO):
         self.rates = rates
         self.portfolio = portfolio
 
     def get_current_value(self):
-        return self.rates.eur_rate * self.portfolio.eur_amount + self.rates.chf_rate * self.portfolio.chf_amount
+        return (
+            self.rates.eur_rate * self.portfolio.eur_amount
+            + self.rates.chf_rate * self.portfolio.chf_amount
+        )
 ```
 
 Now, this is how the view looks like:
@@ -271,7 +286,13 @@ class PorfolioView(GenericAPIView):
         rates_dto = rates_client.get_current_rates()
         handler = PortfolioHandler(rates=rates_dto, portfolio=portfolio_dto)
         current_value = handler.get_current_value()
-        return Response({"current_value_in_usd": current_value, "invested_value_in_usd": starting_value, "current_value_percentage": (current_value * 100) / starting_value})
+        return Response(
+            {
+                "current_value_in_usd": current_value,
+                "invested_value_in_usd": starting_value,
+                "current_value_percentage": (current_value * 100) / starting_value,
+            }
+        )
 
 ```
 
@@ -284,10 +305,16 @@ import pytest
 from myapp.dtos import PortfolioDTO, RatesDTO
 from myapp.handler import PortfolioHandler
 
+
 @pytest.mark.parametrize(
     "portfolio_dto,rates_dto,expected_value",
     [
-        (PortofolioDTO(eur_amount=1000.00, chf_amount=500.00), RatestDTO(eur_rate=1.0, chf_rate=2.0), 2000.00]
+        (
+            PortfolioDTO(eur_amount=1000.00, chf_amount=500.00),
+            RatesDTO(eur_rate=1.0, chf_rate=2.0),
+            2000.00,
+        )
+    ],
 )
 def test_portfolio_handler(portfolio_dto, rates_dto, expected_value):
     handler = PortfolioHandler(rates=rates_dto, portfolio=portfolio_dto)
