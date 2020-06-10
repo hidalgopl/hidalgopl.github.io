@@ -54,13 +54,15 @@ This is how our Portfolio model can look like:
 `myapp.models.py`
 ```python
 from django.db import models
+from djmoney.models.fields import MoneyField  # see https://github.com/django-money/django-money
+
 
 class Portfolio(models.Model):
     user = models.ForeignKey("auth.User")
-    chf_amount = models.FloatField()
-    eur_amount = models.FloatField()
-    chf_rate = models.FloatField()
-    eur_rate = models.FloatField()
+    chf_amount = MoneyField(max_digits=14, decimal_places=2)
+    eur_amount = MoneyField(max_digits=14, decimal_places=2)
+    chf_rate = MoneyField(max_digits=14, decimal_places=2)
+    eur_rate = MoneyField(max_digits=14, decimal_places=2)
 ```
 
 
@@ -71,15 +73,17 @@ Let’s see how it would look like:
 `myapp.models.py`
 ```python
 from django.db import models
+from djmoney.models.fields import MoneyField  # see https://github.com/django-money/django-money
+
 import requests
 
 
 class Portfolio(models.Model):
     user = models.ForeignKey("auth.User")
-    chf_amount = models.FloatField()
-    eur_amount = models.FloatField()
-    chf_rate = models.FloatField()
-    eur_rate = models.FloatField()
+    chf_amount = MoneyField(max_digits=14, decimal_places=2)
+    eur_amount = MoneyField(max_digits=14, decimal_places=2)
+    chf_rate = MoneyField(max_digits=14, decimal_places=2)
+    eur_rate = MoneyField(max_digits=14, decimal_places=2)
 
     def save(self, *args, **kwargs):
         self.super()
@@ -163,20 +167,22 @@ chf_amount * chf_rate + eur_amount * eur_rate
 ```
 Once we have that, we also need to compare those with invested_value to calculate percentage.
 Why don’t we just write it from scratch here? We’ll use python dataclasses, to avoid relaying on django model.
+Money amount would be stored best in Decimal type, here's an explanation [why using float or double is bad idea](https://stackoverflow.com/a/3730040).
 
 ```python
 from dataclasses import dataclass
+from decimal import Decimal
 
 @dataclass
 class PortfolioDTO:
-    eur_amount: float
-    chf_amount: float
+    eur_amount: Decimal
+    chf_amount: Decimal
 
 
 @dataclass
 class RatesDTO:
-    eur_rate: float
-    chf_rate: float
+    eur_rate: Decimal
+    chf_rate: Decimal
 ```
 
 Wait, but this may feel weird. We had almost the same data structure in django model, right? Why then we write it over again? Bear with me, and I hope you’ll have “aha” moment soon.
@@ -190,6 +196,7 @@ Now, let's wrap our currency API client into helper class, which will implement 
 `myapp.clients.py`
 ```python
 from abc import ABC, abstractmethod
+from decimal import Decimal
 
 import requests
 
@@ -225,7 +232,7 @@ class CurrencyRatesClient:
         )  # normally you want to add try/except error handling here – 
         # I’m not doing it for sake of simplicity of this example
         body = resp.json()
-        return RatesDTO(eur_rate=body["EUR"], chf_rate=body["CHF"])
+        return RatesDTO(eur_rate=Decimal(body["EUR"]), Decimal(chf_rate=body["CHF"]))
 
 ```
 Goal here is to avoid writing same code lines over and over, as well as make it easier to mock 3rd Party API requests in tests. In any time, I also want to have ability to change http client (now I’m using requests, but in the future – who knows?)
@@ -239,13 +246,16 @@ Now we need adapter that will translate django model instance into our `Portfoli
 It's really simple one.
 `myapp.adapters.py`
 ```python
+from decimal import Decimal
+
 from my_app.dtos import PortfolioDTO
 from my_app.models import Portfolio
 
 
 def portfolio_django_adapter(portfolio_obj: Portfolio) -> PortfolioDTO:
     return PortfolioDTO(
-        eur_amount=portfolio_obj.eur_amount, chf_amount=portfolio_obj.chf_amount
+        eur_amount=Decimal(portfolio_obj.eur_amount), 
+        chf_amount=Decimal(portfolio_obj.chf_amount)
     )
 
 ```
@@ -307,6 +317,7 @@ Well, short answer is, for this:
 `tests.py`
 ```python
 import pytest
+from decimal import Decimal
 
 from myapp.dtos import PortfolioDTO, RatesDTO
 from myapp.handler import PortfolioHandler
@@ -316,9 +327,9 @@ from myapp.handler import PortfolioHandler
     "portfolio_dto,rates_dto,expected_value",
     [
         (
-            PortfolioDTO(eur_amount=1000.00, chf_amount=500.00),
-            RatesDTO(eur_rate=1.0, chf_rate=2.0),
-            2000.00,
+            PortfolioDTO(eur_amount=Decimal('1000.00'), chf_amount=Decimal('500.00')),
+            RatesDTO(eur_rate=Decimal('1.0'), chf_rate=Decimal('2.0')),
+            Decimal('2000.00'),
         )
     ],
 )
