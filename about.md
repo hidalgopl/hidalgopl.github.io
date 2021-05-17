@@ -14,7 +14,6 @@ For almost two years I worked at [Sauce Labs](https://www.saucelabs.com), where 
 
 Right now, I'm part of [Elotl Inc.](https://elotl.co), where we're building Nodeless Kubernetes and other amazing tools to ease infra management and reduce infra cost.
 
-As a side project, I used to develop [*SecureAPI*](https://secureapi.dev), automated security test tool for API developers. 
 
-[Check it out](https://github.com/hidalgopl/sailor)
-
+## Talks
+- [Intro to Virtual Kubelet - featuring KIP](https://www.youtube.com/watch?v=YY6Ntsfpdq8) 03/29/2021 Golang Poland #12
