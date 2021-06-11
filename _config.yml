@@ -16,7 +16,7 @@
 title: Software loose ends
 email: pbojanowski@protonmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  I write about software programming and architecture. I like Python, Go and Rust recently. I do cloud-native and web development professional. I'm NATS fanboy.
+  I write about software programming and architecture. I am software engineer with Go and Python expertise. I do cloud-native and web development professionally.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: pan_bojan
