@@ -17,3 +17,6 @@ Right now, I'm part of [Elotl Inc.](https://elotl.co), where we're building Node
 
 ## Talks
 - [Intro to Virtual Kubelet - featuring KIP](https://www.youtube.com/watch?v=YY6Ntsfpdq8) 03/29/2021 Golang Poland #12
+
+## Articles
+- [Oracle’s Ampere A1 Arm VMs: First impressions](https://blogs.oracle.com/cloud-infrastructure/oracles-ampere-a1-arm-vms-first-impressions) 05/26/2021 Oracle Cloud Infrastructure Blog
