@@ -10,14 +10,14 @@ categories: kubernetes devops automation golang
 # Enforcing best practices automatically – short tale about Kubernetes Admission Validation Webhooks
 
 
-Administering Kubernetes cluster may become a tricky task over time. Imagine that your engineering team is growing rapidly, and not every new engineer has significant Kubernetes expertise. Your team was asked to ensure that everyone in org are following best practices for configuring and managing their Kubernetes workloads.
+Administering the Kubernetes cluster may become a tricky task over time. Imagine that your engineering team is growing rapidly, and not every new engineer has significant Kubernetes expertise. Your team was asked to ensure that everyone in org is following best practices for configuring and managing their Kubernetes workloads.
 
 I have good news for you: you can do this automatically without writing a lot of boilerplate code. Kubernetes provides a concept of Admission Webhooks. What are admission webhooks? Let’s quote official documentation:
 
 > Admission webhooks are HTTP callbacks that receive admission requests and do something with them. You can define two types of admission webhooks, validating admission webhook and mutating admission webhook. Mutating admission webhooks are invoked first, and can modify objects sent to the API server to enforce custom defaults. After all object modifications are complete, and after the incoming object is validated by the API server, validating admission webhooks are invoked and can reject requests to enforce custom policies.
 
 
-In this article I will focus on the validation admission webhooks, which can effectively prevent cluster users from not following standards that we established. For showing purposes, I decided to create a validating webhook which checks whether [recommended set of labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/).
+In this article I will focus on the validation admission webhooks, which can effectively prevent cluster users from not following standards that we established. For showing purposes, I decided to create a validating webhook which checks whether a [recommended set of labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/).
 is set on Pod objects.
 
 ## Let’s get started.
@@ -45,7 +45,7 @@ func hasRecommendedLabels(pod *v1.Pod) (bool, string) {
 As you probably suspect, we will need to set up HTTP server which has an endpoint accepting and responding in JSON. This endpoint will receive AdmisionReview object in JSON, so our responsibility is to unmarshal it into a struct, check whether all needed labels are set and respond with correct boolean under allowed key.
 
 For reference, [here’s kubernetes documentation](https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#webhook-request-and-response) about expected request and response payloads. 
-To avoid writing a lot of boilerplate code, we are going to use excellent [controller-runtime](https://pkg.go.dev/sigs.k8s.io/controller-runtime/pkg/webhook) package, which would do all heavy lifting for us.
+To avoid writing a lot of boilerplate code, we are going to use an excellent [controller-runtime](https://pkg.go.dev/sigs.k8s.io/controller-runtime/pkg/webhook) package, which would do all the heavy lifting for us.
 
 Our responsibility would be to write only our validating logic. We are going to implement Handler interface which looks like this:
 ```go
@@ -177,7 +177,7 @@ webhooks:
         apiVersions: ["v1"]
         resources: ["pods"]
 ```
-After this object is created, we can test it, simply by creating a pod. As we specified above, after Pod is created, kubernetes will send Pod object to `k8s-labels-validation-webhook:8443/validate`. Then, our app with verify whether the pod has needed labels.
+After this object is created, we can test it, simply by creating a pod. As we specified above, after Pod is created, kubernetes will send Pod object to `k8s-labels-validation-webhook:8443/validate`. Then, our app will verify whether the pod has needed labels.
 
 Applying pod without set labels should result with similar output:
 ```
@@ -187,8 +187,8 @@ Error from server: error when creating "pod_test.yaml": admission webhook "recom
 
 
 ## Summary
-Admission controller webhooks are simple yet powerful way to maintain your cluster workloads and enhance organization-wide practices. You can use it to ensure that workloads are labeled properly, have resource requests and limits set, etc. 
-There is also another class of admission controller webhooks, mutating ones, which allow you to modify objects Spec. Example use case of those could be injecting sidecar containers to every Pod.
+Admission controller webhooks are a simple yet powerful way to maintain your cluster workloads and enhance organization-wide practices. You can use it to ensure that workloads are labeled properly, have resource requests and limits set, etc. 
+There is also another class of admission controller webhooks, mutating ones, which allow you to modify objects Spec. Example use cases of those could be injecting sidecar containers to every Pod.
 What I really like about admission controller webhooks is that they don't require much effort to create, but they can provide a lot of value for your engineering teams.
 
 Code used in this article can be seen in [my github](https://github.com/hidalgopl/k8s-labels-validation-webhook).
