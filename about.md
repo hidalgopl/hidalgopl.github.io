@@ -12,11 +12,13 @@ After almost two years I joined [*Unit9*](https://unit9.com), pretty cool digita
 
 For almost two years I worked at [Sauce Labs](https://www.saucelabs.com), where I was part of Core Services team, working mostly in Python & Go microservices deployed into public & private Kubernetes clusters.
 
-Right now, I'm part of [Elotl Inc.](https://elotl.co), where we're building Nodeless Kubernetes and other amazing tools to ease infra management and reduce infra cost.
+Right now, I'm part of [Elotl Inc.](https://elotl.co), where we're building [Nodeless Kubernetes](https://nodelesskubernetes.com) and other amazing tools to ease infra management, enable multi-cluster, multi-cloud environments and reduce infra cost.
 
 
 ## Talks
 - [Intro to Virtual Kubelet - featuring KIP](https://www.youtube.com/watch?v=YY6Ntsfpdq8) 03/29/2021 Golang Poland #12
+- [Buildscaler: An elastic Horizontal Pod Autoscaler framework for CI workloads with Henry Precheur](https://youtu.be/S07OdFshwDk?t=23521) 05/14/2022 Cloud Native Rejekts EU (Valencia) 2022
+
 
 ## Articles
 - [Oracle’s Ampere A1 Arm VMs: First impressions](https://blogs.oracle.com/cloud-infrastructure/oracles-ampere-a1-arm-vms-first-impressions) 05/26/2021 Oracle Cloud Infrastructure Blog
