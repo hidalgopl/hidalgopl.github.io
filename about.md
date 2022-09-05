@@ -23,3 +23,6 @@ Right now, I'm part of [Elotl Inc.](https://elotl.co), where we're building [Nod
 ## Articles
 - [Oracle’s Ampere A1 Arm VMs: First impressions](https://blogs.oracle.com/cloud-infrastructure/oracles-ampere-a1-arm-vms-first-impressions) 05/26/2021 Oracle Cloud Infrastructure Blog
 - [How Elotl Autoscales CI in Kubernetes with Buildkite & Amazon EKS](https://buildkite.com/blog/autoscaling-buildkite-kubernetes-cluster) 08/10/2021 Buildkite Blog
+
+## Podcasts
+- [Zmień na IT #3: Czy da się pracować w Sillicon Valley po skończeniu geografii?](https://anchor.fm/sopalczynski/episodes/Czy-da-sie-pracowac-w-Silicon-Valley-po-skonczeniu-geografii-e1n9r0i) 09/02/2022 Hosted by [Sebastian Opałczyński](https://www.zmiennait.blog/o-mnie/) [polish]
