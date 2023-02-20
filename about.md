@@ -4,9 +4,9 @@ title: About me
 permalink: /about/
 ---
 
-My name is Paweł Bojanowski and I'm software engineer based in Warsaw.
+My name is Paweł Bojanowski and I'm a software engineer based in Warsaw.
 
-I started my career in 2016 in *Risen.*, web and mobile software consulting company, I was responsible for building backends for those, usually using Django & Django REST Framework, as most of the backends were just JSON-based web APIs.
+I started my career in 2016 in *Risen.*, web and mobile software consulting company, where I was responsible for building backends for those, usually using Django & Django REST Framework, as most of the backends were just JSON-based web APIs.
 
 After almost two years I joined [*Unit9*](https://unit9.com), pretty cool digital, innovative production studio; I worked on few projects there, mostly web game backends with [OnePlus Crackables](https://www.unit9.com/project/oneplus-crackables/) as a highlight on my time there.
 
