@@ -1,4 +1,12 @@
- People who know me well, people who I work with, already know that there is one sacred slot blocked in my calendar every other week. It's called Squash Time. Every week I'm going to the squash / tennis club near my place to play in an amateur squash league. Next week will mark a one year anniversary of my first game there, so it's naturally good moment to reflect back about my history in this sport.  
+---
+layout: post
+title:  "Squash is fun"
+date:   2022-07-02 21:12:11 +0200
+author: "Paweł Bojanowski"
+categories: squash fun sports
+---
+
+People who know me well, people who I work with, already know that there is one sacred slot blocked in my calendar every other week. It's called Squash Time. Every week I'm going to the squash / tennis club near my place to play in an amateur squash league. Next week will mark a one year anniversary of my first game there, so it's naturally good moment to reflect back about my history in this sport.  
 
 I started playing squash at the age of 25, so very late. I haven't been playing tennis or any other racket sport (except casually playing badminton on summer vacations back when I was a kid) before. It was really a new thing for me and together with a good friend of mine, we started on our squash journey by just booking a court and trying to play for at least an hour every week. Naturally, we were terrible at the beginning; every serve going further back than a service box was a point for opponent; rallies longer than 10 seconds were super rare; a technically clean hit of the ball was a reason for celebration. We also used a wrong ball (ball in squash has one or two dots with color system marking how easy it is to keep the ball hot, which is crucial for this sport - another fact that we learned the hard way).  
 
