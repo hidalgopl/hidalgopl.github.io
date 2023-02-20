@@ -19,7 +19,7 @@ As one of the most junior people in the team, I took the role of curious observe
 
 ## The problem
 
-Our system was a bunch of distributed micro macro micro services. 
+Our system was a bunch of distributed ~~micro~~ ~~macro~~ microservices. 
 We got a report that the average request processing visibly increased and we were task to hunt down the root cause of it. 
 After initial investigation, we found a bottleneck: microservice called **OmegaStar**&trade; (not really, but I watched way too many **KRAZAM** [videos](https://www.youtube.com/@KRAZAM) recently).
 Bob and Joe volunteered to investigate further, separately and get back together after some time, to compare the findings.
