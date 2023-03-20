@@ -19,7 +19,7 @@ Right now, I'm part of [Elotl Inc.](https://elotl.co), where we're building [Nod
 - [Intro to Virtual Kubelet - featuring KIP](https://www.youtube.com/watch?v=YY6Ntsfpdq8) 03/29/2021 Golang Poland #12
 - [Buildscaler: An elastic Horizontal Pod Autoscaler framework for CI workloads with Henry Precheur](https://youtu.be/S07OdFshwDk?t=23521) 05/14/2022 Cloud Native Rejekts EU (Valencia) 2022
 - [Ligthining talk: E2E Testing of Kube Controllers - the Good, the Bad and the Ugly](https://www.youtube.com/watch?v=GWCalZ2HSJA) 10/23/2022 Cloud Native Rejekts NA (Detroit) 2022
-
+- [Kubernetes for Mac - run your Kubernetes workloads on MacOS worker nodes!](https://youtu.be/LvrAhu_IhVk?t=1030) 03/16/2023 Kubernetes & Cloud Native Berlin Meetup
 
 ## Articles
 - [Oracle’s Ampere A1 Arm VMs: First impressions](https://blogs.oracle.com/cloud-infrastructure/oracles-ampere-a1-arm-vms-first-impressions) 05/26/2021 Oracle Cloud Infrastructure Blog
