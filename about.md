@@ -21,7 +21,7 @@ Right now, I'm part of [Elotl Inc.](https://elotl.co), where we're building [Nod
 - [Ligthining talk: E2E Testing of Kube Controllers - the Good, the Bad and the Ugly](https://www.youtube.com/watch?v=GWCalZ2HSJA) 10/23/2022 Cloud Native Rejekts NA (Detroit) 2022
 - [Kubernetes for Mac - run your Kubernetes workloads on MacOS worker nodes!](https://youtu.be/LvrAhu_IhVk?t=1030) 03/16/2023 Kubernetes & Cloud Native Berlin Meetup
 - [The missing piece of your GitOps pipeline with Selvi Kadirvel](https://www.youtube.com/watch?v=t4s9s8N5erw) 04/17/2023 Cloud Native Rejekts EU (Amsterdam)
-
+- [Canary and Blue-Green Argo Rollouts made possible in a multi-cluster environment](https://www.youtube.com/watch?v=OFSANmsmzkg) 10/06/2023 DevOps Days (Madrid)
 
 ## Articles
 - [Oracle’s Ampere A1 Arm VMs: First impressions](https://blogs.oracle.com/cloud-infrastructure/oracles-ampere-a1-arm-vms-first-impressions) 05/26/2021 Oracle Cloud Infrastructure Blog
